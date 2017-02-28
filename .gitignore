@@ -1,0 +1,14 @@
+target/
+lib_managed/
+src_managed/
+project/boot/
+.history
+.cache
+*.iml
+.idea/
+*.ipr
+*.iws
+/out/
+.idea_modules/
+project/target
+*/target
