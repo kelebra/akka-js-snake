@@ -1,14 +1,10 @@
 package com.github.kelebra.akka.js.snake
 
-sealed trait Block {
+case class Block(x: Int, y: Int, radius: Int) {
 
-  def x: Int
+  def move(direction: Direction): Block = copy(x = direction.dx(x), y = direction.dy(y))
 
-  def y: Int
+  def draw()(implicit d: Drawing): Unit = d.draw(this)
 
-  def radius: Int
-
-  def draw(implicit d: Drawing): Block = d.draw(this)
-
-  def erase(implicit d: Drawing): Block = d.erase(this)
+  def erase()(implicit d: Drawing): Unit = d.erase(this)
 }
