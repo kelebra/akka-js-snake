@@ -2,7 +2,11 @@ package com.github.kelebra.akka.js.snake
 
 import akka.actor.Actor
 
+import scala.language.postfixOps
+
 trait Snake extends Actor with Drawing {
+
+  implicit val d: Drawing = this
 
   def receive: Receive = behavior(State())
 
@@ -10,7 +14,11 @@ trait Snake extends Actor with Drawing {
     case Start(direction, block) => context.become(behavior(State(direction, block :: Nil)))
     case direction: Direction => context.become(behavior(state ~> direction))
     case Grow => context.become(behavior(state :+ tail(state.last)))
-    case Move => ???
+    case Move =>
+      val head = state.head.move(state.direction)
+      head.draw()
+      state.last.erase()
+      context.become(behavior(head +: state :-))
     case Lost => context.become(behavior(state ~> →←))
   }
 
@@ -23,6 +31,10 @@ trait Snake extends Actor with Drawing {
 private case class State(direction: Direction = →←, blocks: Seq[Block] = Nil) {
 
   def :+(block: Block): State = copy(blocks = blocks :+ block)
+
+  def +:(block: Block): State = copy(blocks = block +: blocks)
+
+  def :- : State = copy(blocks = blocks.dropRight(1))
 
   def ~>(direction: Direction): State = copy(direction = direction)
 
