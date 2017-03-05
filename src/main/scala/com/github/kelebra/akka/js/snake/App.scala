@@ -13,6 +13,7 @@ object App extends js.JSApp {
     akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.Snake" -> classOf[Snake])
     akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.CanvasDrawing" -> classOf[CanvasDrawing])
     akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.Game" -> classOf[Game])
+    akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.Keyboard" -> classOf[Keyboard])
 
     val system = ActorSystem("system")
     val fps = 60
@@ -20,8 +21,10 @@ object App extends js.JSApp {
 
     val paint = system.actorOf(Props(classOf[CanvasDrawing], canvas))
     val snake = system.actorOf(Props(classOf[Snake], paint))
+    val keyboard = system.actorOf(Props(classOf[Keyboard], snake))
     val game = system.actorOf(Props(classOf[Game], snake, fps))
 
     game ! Start(↑, Block(canvas.width / 2, canvas.height / 2, 5))
+    document.onkeydown = (event: KeyboardEvent) => keyboard ! event.keyCode
   }
 }
