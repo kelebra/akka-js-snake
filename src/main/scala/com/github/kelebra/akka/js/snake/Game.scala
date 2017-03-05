@@ -1,10 +1,10 @@
 package com.github.kelebra.akka.js.snake
 
-import akka.actor.{Actor, ActorRef, Cancellable, PoisonPill}
+import akka.actor.{Actor, ActorRef, Cancellable, Terminated}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js.annotation.JSExport
 
 @JSExport
@@ -16,13 +16,13 @@ case class Game(snake: ActorRef, fps: Int) extends Actor {
 
   private def behavior(state: Option[Cancellable] = None): Receive = {
     case start: Start =>
+      context watch snake
       snake forward start
       context.become(
         behavior(Option(context.system.scheduler.schedule(frequency, frequency, snake, Move)))
       )
-    case Lost =>
-      snake ! PoisonPill
+    case _: Terminated =>
       state.foreach(_.cancel())
-      self ! PoisonPill
+      context unwatch snake
   }
 }

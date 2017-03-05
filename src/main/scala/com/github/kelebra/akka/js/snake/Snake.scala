@@ -16,9 +16,9 @@ case class Snake(pane: ActorRef) extends Actor {
     case Grow => context.become(behavior(state :+ tail(state.last)))
     case Move =>
       val head = state.head.move(state.direction)
-      pane ! Draw(erase = Seq(state.last), draw = Seq(head))
+      pane ! Erase(state.last)
+      pane ! Draw(head)
       context.become(behavior(head +: state :-))
-    case Lost => context.become(behavior(state ~> →←))
   }
 
   private def tail(last: Block): Block = {
