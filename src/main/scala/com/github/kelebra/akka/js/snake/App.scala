@@ -1,5 +1,8 @@
 package com.github.kelebra.akka.js.snake
 
+import akka.actor.{ActorSystem, Props}
+import org.scalajs.dom.{html, _}
+
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 
@@ -7,6 +10,18 @@ object App extends js.JSApp {
 
   @JSExport
   override def main(): Unit = {
-    println("It is up!")
+    akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.Snake" -> classOf[Snake])
+    akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.CanvasDrawing" -> classOf[CanvasDrawing])
+    akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.Game" -> classOf[Game])
+
+    val system = ActorSystem("system")
+    val fps = 60
+    val canvas = document.getElementById("canvas").asInstanceOf[html.Canvas]
+
+    val paint = system.actorOf(Props(classOf[CanvasDrawing], canvas))
+    val snake = system.actorOf(Props(classOf[Snake], paint))
+    val game = system.actorOf(Props(classOf[Game], snake, fps))
+
+    game ! Start(↑, Block(canvas.width / 2, canvas.height / 2, 5))
   }
 }

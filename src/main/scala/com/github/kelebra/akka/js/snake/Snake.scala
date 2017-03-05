@@ -1,12 +1,12 @@
 package com.github.kelebra.akka.js.snake
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef}
 
 import scala.language.postfixOps
+import scala.scalajs.js.annotation.JSExport
 
-trait Snake extends Actor with Drawing {
-
-  implicit val d: Drawing = this
+@JSExport
+case class Snake(pane: ActorRef) extends Actor {
 
   def receive: Receive = behavior(State())
 
@@ -16,8 +16,7 @@ trait Snake extends Actor with Drawing {
     case Grow => context.become(behavior(state :+ tail(state.last)))
     case Move =>
       val head = state.head.move(state.direction)
-      head.draw()
-      state.last.erase()
+      pane ! Draw(erase = Seq(state.last), draw = Seq(head))
       context.become(behavior(head +: state :-))
     case Lost => context.become(behavior(state ~> →←))
   }

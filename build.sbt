@@ -18,8 +18,8 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %%% "scalatags" % "0.4.5",
   "org.akka-js" %%% "akkajsactor" % "0.2.4.16",
   "org.akka-js" %%% "akkajstestkit" % "0.2.4.16" % Test,
-  "org.scalatest" %%% "scalatest" % "3.0.1" % Test,
-  "org.scalatest" %% "scalatest" % "3.0.1" % Test
+  "org.scalatest" %% "scalatest" % "3.0.1" % Test,
+  "org.scalatest" %%% "scalatest" % "3.0.1" % Test
 )
 
 scalaJSStage := FastOptStage

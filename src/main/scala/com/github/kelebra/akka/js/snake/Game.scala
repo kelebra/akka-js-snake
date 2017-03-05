@@ -2,10 +2,12 @@ package com.github.kelebra.akka.js.snake
 
 import akka.actor.{Actor, ActorRef, Cancellable, PoisonPill}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.scalajs.js.annotation.JSExport
 
+@JSExport
 case class Game(snake: ActorRef, fps: Int) extends Actor {
 
   private val frequency: FiniteDuration = (1000 milliseconds) / fps

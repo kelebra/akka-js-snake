@@ -6,6 +6,8 @@ case object Grow extends Command
 
 case object Move extends Command
 
+case class Draw(erase: Seq[Block] = Seq.empty, draw: Seq[Block]= Seq.empty)
+
 sealed trait Direction extends Command {
 
   def dx(x: Int): Int = x
