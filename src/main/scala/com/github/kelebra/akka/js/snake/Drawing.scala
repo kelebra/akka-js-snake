@@ -5,6 +5,7 @@ import org.scalajs.dom
 import org.scalajs.dom.html
 
 import scala.scalajs.js.annotation.JSExport
+import scala.util.Random
 
 trait Drawing extends Actor {
 
@@ -32,6 +33,11 @@ case class CanvasDrawing(canvas: html.Canvas) extends Drawing {
 
   def receive: Receive = {
     case Draw(block) if canDraw(block) => draw(block)
+    case DrawRandomBlock =>
+      val radius = Random.nextInt(10) + 5
+      val x = radius + Random.nextInt(canvas.width - 2 * radius)
+      val y = radius + Random.nextInt(canvas.height - radius)
+      draw(Block(x, y, radius))
     case Erase(block) => erase(block)
     case _ =>
       sender() ! PoisonPill

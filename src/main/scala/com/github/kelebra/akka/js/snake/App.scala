@@ -19,10 +19,10 @@ object App extends js.JSApp {
     val fps = 60
     val canvas = document.getElementById("canvas").asInstanceOf[html.Canvas]
 
-    val paint = system.actorOf(Props(classOf[CanvasDrawing], canvas))
-    val snake = system.actorOf(Props(classOf[Snake], paint))
+    val pane = system.actorOf(Props(classOf[CanvasDrawing], canvas))
+    val snake = system.actorOf(Props(classOf[Snake], pane))
     val keyboard = system.actorOf(Props(classOf[Keyboard], snake))
-    val game = system.actorOf(Props(classOf[Game], snake, fps))
+    val game = system.actorOf(Props(classOf[Game], snake, pane, fps))
 
     game ! Start(↑, Block(canvas.width / 2, canvas.height / 2, 5))
     document.onkeydown = (event: KeyboardEvent) => keyboard ! event.keyCode

@@ -10,7 +10,11 @@ case object Move extends Command
 
 case class Draw(block: Block)
 
+case object DrawRandomBlock
+
 case class Erase(block: Block)
+
+case object Consumed extends Command
 
 sealed trait Direction extends Command {
 

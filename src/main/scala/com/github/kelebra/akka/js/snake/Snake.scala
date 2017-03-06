@@ -13,7 +13,7 @@ case class Snake(pane: ActorRef) extends Actor {
   private def behavior(state: State): Receive = {
     case Start(direction, block) => context.become(behavior(State(direction, block :: Nil)))
     case direction: Direction => context.become(behavior(state ~> direction))
-    case Grow => context.become(behavior(state :+ tail(state.last)))
+    case Grow => context.become(behavior(state :+ `new tail`(state last)))
     case Move =>
       val head = state.head.move(state.direction)
       pane ! Erase(state.last)
@@ -21,7 +21,7 @@ case class Snake(pane: ActorRef) extends Actor {
       context.become(behavior(head +: state :-))
   }
 
-  private def tail(last: Block): Block = {
+  private def `new tail`(last: Block): Block = {
     val radius = last.radius
     Block(last.x + radius, last.y + radius + 1, radius)
   }
