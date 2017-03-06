@@ -5,6 +5,7 @@ import org.scalajs.dom.{html, _}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
+import scala.util.Random
 
 object App extends js.JSApp {
 
@@ -19,10 +20,19 @@ object App extends js.JSApp {
     val fps = 60
     val canvas = document.getElementById("canvas").asInstanceOf[html.Canvas]
 
+    val `random block generator`: () => Block = () => {
+      val radius = 5 + Random.nextInt(5)
+      Block(
+        radius + Random.nextInt(canvas.width - radius),
+        radius + Random.nextInt(canvas.height - radius),
+        radius
+      )
+    }
+
     val pane = system.actorOf(Props(classOf[CanvasDrawing], canvas))
     val snake = system.actorOf(Props(classOf[Snake], pane))
     val keyboard = system.actorOf(Props(classOf[Keyboard], snake))
-    val game = system.actorOf(Props(classOf[Game], snake, pane, fps))
+    val game = system.actorOf(Props(classOf[Game], snake, pane, `random block generator`, fps))
 
     game ! Start(↑, Block(canvas.width / 2, canvas.height / 2, 5))
     document.onkeydown = (event: KeyboardEvent) => keyboard ! event.keyCode

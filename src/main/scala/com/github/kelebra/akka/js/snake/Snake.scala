@@ -13,31 +13,44 @@ case class Snake(pane: ActorRef) extends Actor {
   private def behavior(state: State): Receive = {
     case Start(direction, block) => context.become(behavior(State(direction, block :: Nil)))
     case direction: Direction => context.become(behavior(state ~> direction))
-    case Grow => context.become(behavior(state :+ `new tail`(state last)))
+    case Grow =>
+      val tail = `new tail`(state last)
+      pane ! Draw(tail)
+      context.become(behavior(state :+ tail))
+    case Fruit(block) => context.become(behavior(state.copy(fruit = Option(block))))
     case Move =>
-      val head = state.head.move(state.direction)
-      pane ! Erase(state.last)
-      pane ! Draw(head)
-      context.become(behavior(head +: state :-))
+      val `next head` = state.head.move(state.direction)
+      val `fruit consumed` = state.fruit.exists(_.intersects(`next head`))
+      if (`fruit consumed`) {
+        state.fruit.foreach(fruit => pane ! Erase(fruit))
+        self ! Grow
+        sender() ! Fruitless
+      } else {
+        pane ! Erase(state.last)
+        pane ! Draw(`next head`)
+        context.become(behavior((`next head` +: state) :-))
+      }
   }
 
   private def `new tail`(last: Block): Block = {
     val radius = last.radius
-    Block(last.x + radius, last.y + radius + 1, radius)
+    Block(last.x, last.y + radius + 1, radius)
   }
 }
 
-private case class State(direction: Direction = →←, blocks: Seq[Block] = Nil) {
+private case class State(direction: Direction = →←,
+                         body: Seq[Block] = Nil,
+                         fruit: Option[Block] = None) {
 
-  def :+(block: Block): State = copy(blocks = blocks :+ block)
+  def :+(block: Block): State = copy(body = body :+ block)
 
-  def +:(block: Block): State = copy(blocks = block +: blocks)
+  def +:(block: Block): State = copy(body = block +: body)
 
-  def :- : State = copy(blocks = blocks.dropRight(1))
+  def :- : State = copy(body = body.dropRight(1))
 
   def ~>(direction: Direction): State = copy(direction = direction)
 
-  def head: Block = blocks.head
+  def head: Block = body.head
 
-  def last: Block = blocks.last
+  def last: Block = body.last
 }

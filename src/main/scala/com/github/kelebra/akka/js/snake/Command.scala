@@ -8,11 +8,13 @@ case object Grow extends Command
 
 case object Move extends Command
 
-case class Draw(block: Block)
+case class Draw(block: Block) extends Command
 
-case object DrawRandomBlock
+case class Fruit(block: Block) extends Command
 
-case class Erase(block: Block)
+case object Fruitless extends Command
+
+case class Erase(block: Block) extends Command
 
 case object Consumed extends Command
 
