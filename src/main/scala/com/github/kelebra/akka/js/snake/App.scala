@@ -17,7 +17,7 @@ object App extends js.JSApp {
     akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.Keyboard" -> classOf[Keyboard])
 
     val system = ActorSystem("system")
-    val `moves per second` = 30
+    val `moves per second` = 27
     val canvas = document.getElementById("canvas").asInstanceOf[html.Canvas]
     canvas.width = 1000
     canvas.height = 500
