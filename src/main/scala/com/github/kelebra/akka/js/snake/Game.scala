@@ -11,9 +11,9 @@ import scala.scalajs.js.annotation.JSExport
 case class Game(snake: ActorRef,
                 pane: ActorRef,
                 `random block generator`: () => Block,
-                fps: Int) extends Actor {
+                `moves per second`: Int) extends Actor {
 
-  private val frequency: FiniteDuration = (1000 milliseconds) / fps
+  private val `millis per move`: FiniteDuration = (1000 milliseconds) / `moves per second`
 
   def receive: Receive = behavior()
 
@@ -23,7 +23,7 @@ case class Game(snake: ActorRef,
       snake forward start
       self ! Fruitless
       context.become(
-        behavior(Option(context.system.scheduler.schedule(frequency, frequency, snake, Move)))
+        behavior(Option(context.system.scheduler.schedule(`millis per move`, `millis per move`, snake, Move)))
       )
     case Fruitless =>
       val fruit = `random block generator`()

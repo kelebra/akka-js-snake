@@ -1,12 +1,12 @@
 package com.github.kelebra.akka.js.snake
 
-import akka.actor.{Actor, PoisonPill}
+import akka.actor.{Actor, ActorLogging, PoisonPill}
 import org.scalajs.dom
 import org.scalajs.dom.html
 
 import scala.scalajs.js.annotation.JSExport
 
-trait Drawing extends Actor {
+trait Drawing extends Actor with ActorLogging {
 
   def draw(block: Block): Unit
 
@@ -33,7 +33,7 @@ case class CanvasDrawing(canvas: html.Canvas) extends Drawing {
   def receive: Receive = {
     case Draw(block) if canDraw(block) => draw(block)
     case Erase(block) => erase(block)
-    case _ =>
+    case _ | GameOver =>
       sender() ! PoisonPill
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.font = "20px Georgia"

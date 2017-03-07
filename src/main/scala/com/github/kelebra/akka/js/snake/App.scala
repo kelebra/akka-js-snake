@@ -17,11 +17,13 @@ object App extends js.JSApp {
     akka.actor.JSDynamicAccess.injectClass("com.github.kelebra.akka.js.snake.Keyboard" -> classOf[Keyboard])
 
     val system = ActorSystem("system")
-    val fps = 60
+    val `moves per second` = 30
     val canvas = document.getElementById("canvas").asInstanceOf[html.Canvas]
+    canvas.width = 1000
+    canvas.height = 500
 
     val `random block generator`: () => Block = () => {
-      val radius = 5 + Random.nextInt(5)
+      val radius = 5
       Block(
         radius + Random.nextInt(canvas.width - radius),
         radius + Random.nextInt(canvas.height - radius),
@@ -32,7 +34,7 @@ object App extends js.JSApp {
     val pane = system.actorOf(Props(classOf[CanvasDrawing], canvas))
     val snake = system.actorOf(Props(classOf[Snake], pane))
     val keyboard = system.actorOf(Props(classOf[Keyboard], snake))
-    val game = system.actorOf(Props(classOf[Game], snake, pane, `random block generator`, fps))
+    val game = system.actorOf(Props(classOf[Game], snake, pane, `random block generator`, `moves per second`))
 
     game ! Start(↑, Block(canvas.width / 2, canvas.height / 2, 5))
     document.onkeydown = (event: KeyboardEvent) => keyboard ! event.keyCode
