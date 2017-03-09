@@ -2,7 +2,7 @@ package com.github.kelebra.akka.js.snake
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 
-class KeyboardSpecification extends AkkaSpec(ActorSystem("test")) {
+class KeyboardSpecification extends AkkaSpec(ActorSystem("keyboard-spec")) {
 
   lazy val keyboard: ActorRef = system.actorOf(Props(classOf[Keyboard], self))
 
