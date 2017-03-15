@@ -1,12 +1,32 @@
 package com.github.kelebra.akka.js.snake
 
-case class Block(x: Int, y: Int, radius: Int) {
+import com.softwaremill.quicklens._
 
-  def move(direction: Direction): Block = copy(x = direction.dx(x, radius), y = direction.dy(y, radius))
+case class Block(x: Int, y: Int, radius: Int)
 
-  def intersects(another: Block): Boolean = {
-    val `horizontal intersection` = x > another.x + another.radius || another.x > x + radius
-    val `vertical intersection` = y < another.y - another.radius || another.y < y - radius
+trait BlockOps {
+
+  def move(block: Block, direction: Direction): Block
+
+  def ∩(first: Block, second: Block): Boolean
+}
+
+trait OpticalBlockOps extends BlockOps {
+
+  def move(block: Block, direction: Direction): Block = {
+    val radius = block.radius
+    direction match {
+      case `↑` => block.modify(_.y).using(_ - radius - 1)
+      case `↓` => block.modify(_.y).using(_ + radius + 1)
+      case `→` => block.modify(_.x).using(_ + radius + 1)
+      case `←` => block.modify(_.x).using(_ - radius - 1)
+      case `→←` => block
+    }
+  }
+
+  def ∩(first: Block, second: Block): Boolean = {
+    val `horizontal intersection` = first.x > second.x + second.radius || second.x > first.x + first.radius
+    val `vertical intersection` = first.y < second.y - second.radius || second.y < first.y - first.radius
     !(`horizontal intersection` || `vertical intersection`)
   }
 }

@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "org.scala-js" %%% "scalajs-dom" % "0.8.0",
   "com.lihaoyi" %%% "scalatags" % "0.4.5",
   "org.akka-js" %%% "akkajsactor" % "0.2.4.16",
+  "com.softwaremill.quicklens" %%% "quicklens" % "1.4.8",
   "org.akka-js" %%% "akkajstestkit" % "0.2.4.16" % Test,
   "org.scalatest" %% "scalatest" % "3.0.1" % Test,
   "org.scalatest" %%% "scalatest" % "3.0.1" % Test

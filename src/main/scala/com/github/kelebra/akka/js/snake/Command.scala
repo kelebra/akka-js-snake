@@ -20,44 +20,17 @@ case object Fruitless extends Command
 
 case object Consumed extends Command
 
-sealed trait Direction extends Command {
+sealed class Direction(op: => Direction) extends Command {
 
-  def dx(x: Int, radius: Int): Int = x
-
-  def dy(y: Int, radius: Int): Int = y
-
-  def opposite: Direction
+  def opposite: Direction = op
 }
 
-case object `↑` extends Direction {
+case object `↑` extends Direction(↓)
 
-  override def dy(y: Int, radius: Int): Int = y - radius - 1
+case object `↓` extends Direction(↑)
 
-  def opposite: Direction = ↓
-}
+case object `→` extends Direction(`←`)
 
-case object `↓` extends Direction {
+case object `←` extends Direction(`→`)
 
-  override def dy(y: Int, radius: Int): Int = y + radius + 1
-
-  def opposite: Direction = ↑
-}
-
-case object `→` extends Direction {
-
-  override def dx(x: Int, radius: Int): Int = x + radius + 1
-
-  def opposite: Direction = `←`
-}
-
-case object `←` extends Direction {
-
-  override def dx(x: Int, radius: Int): Int = x - radius - 1
-
-  def opposite: Direction = `→`
-}
-
-case object `→←` extends Direction {
-
-  def opposite: Direction = `↑`
-}
+case object `→←` extends Direction(`↑`)
