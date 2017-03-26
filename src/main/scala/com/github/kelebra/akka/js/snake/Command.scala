@@ -4,8 +4,6 @@ sealed trait Command
 
 case class Start(direction: Direction, block: Block) extends Command
 
-case object GameOver extends Command
-
 case object Grow extends Command
 
 case object Move extends Command
@@ -20,7 +18,7 @@ case object Fruitless extends Command
 
 case object Consumed extends Command
 
-sealed class Direction(op: => Direction) extends Command {
+sealed abstract class Direction(op: => Direction) extends Command {
 
   def opposite: Direction = op
 }

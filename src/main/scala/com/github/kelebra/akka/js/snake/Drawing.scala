@@ -33,7 +33,7 @@ case class CanvasDrawing(canvas: html.Canvas) extends Drawing {
   def receive: Receive = {
     case Draw(block) if canDraw(block) => draw(block)
     case Erase(block) => erase(block)
-    case _ | GameOver =>
+    case _ =>
       sender() ! PoisonPill
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.font = "20px Georgia"

@@ -19,14 +19,13 @@ object App extends js.JSApp {
     canvas.width = 1000
     canvas.height = 500
 
-    val `random block generator`: () => Block = () => {
-      val radius = 5
-      Block(
-        radius + Random.nextInt(canvas.width - radius),
-        radius + Random.nextInt(canvas.height - radius),
-        radius
-      )
-    }
+    val radius = 5
+
+    val `random block generator`: () => Block = () => Block(
+      radius + Random.nextInt(canvas.width - radius - 1) + 1,
+      radius + Random.nextInt(canvas.height - radius - 1) + 1,
+      radius
+    )
 
     val pane = system.actorOf(Props(classOf[CanvasDrawing], canvas))
     val snake = system.actorOf(Props(classOf[Snake], pane))
