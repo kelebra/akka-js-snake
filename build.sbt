@@ -11,7 +11,7 @@ scalaVersion := "2.11.8"
 
 scalaBinaryVersion := "2.11"
 
-sbtVersion := "0.13.7"
+sbtVersion := "0.13.13"
 
 libraryDependencies ++= Seq(
   "org.scala-js" %%% "scalajs-dom" % "0.8.0",
