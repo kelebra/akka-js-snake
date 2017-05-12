@@ -1,6 +1,9 @@
 # akka-js-snake
 Snake game implementation using akka.js
 
+### How things were done:
+[This blog post](http://tkachuko.info/blog#post=Full frontal akka: akka.js) describes all the steps taken and ideas behind picked abstractions.
+
 ### Build status
 
 [![Build Status](https://travis-ci.org/kelebra/akka-js-snake.svg?branch=master)](https://travis-ci.org/kelebra/akka-js-snake)
