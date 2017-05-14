@@ -4,9 +4,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef}
 import com.github.kelebra.akka.js.snake.state.{StateTransition, State}
 
 import scala.language.postfixOps
-import scala.scalajs.js.annotation.JSExport
 
-@JSExport
 case class Snake(pane: ActorRef) extends Actor with ActorLogging with OpticalBlockOps with StateTransition {
 
   def receive: Receive = behavior(State())

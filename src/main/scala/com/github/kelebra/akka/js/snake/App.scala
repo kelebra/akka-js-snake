@@ -11,7 +11,6 @@ object App extends js.JSApp {
 
   @JSExport
   override def main(): Unit = {
-    EnableReflectiveActorCreation()
 
     val system = ActorSystem("system")
     val `moves per second` = 27

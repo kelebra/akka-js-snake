@@ -4,8 +4,6 @@ import akka.actor.{Actor, ActorLogging, PoisonPill}
 import org.scalajs.dom
 import org.scalajs.dom.html
 
-import scala.scalajs.js.annotation.JSExport
-
 trait Drawing extends Actor with ActorLogging {
 
   def draw(block: Block): Unit
@@ -13,7 +11,6 @@ trait Drawing extends Actor with ActorLogging {
   def erase(block: Block): Unit
 }
 
-@JSExport
 case class CanvasDrawing(canvas: html.Canvas) extends Drawing {
 
   private val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
