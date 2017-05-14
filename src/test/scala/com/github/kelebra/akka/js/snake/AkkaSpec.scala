@@ -9,5 +9,4 @@ abstract class AkkaSpec(_system: => ActorSystem) extends TestKit(_system)
 
   final override def afterAll: Unit = shutdown()
 
-  final override def beforeAll: Unit = EnableReflectiveActorCreation()
 }

@@ -5,9 +5,7 @@ import akka.actor.{Actor, ActorRef, Cancellable, Terminated}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import scala.scalajs.js.annotation.JSExport
 
-@JSExport
 case class Game(snake: ActorRef,
                 pane: ActorRef,
                 `random block generator`: () => Block,
